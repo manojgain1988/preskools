@@ -23,7 +23,21 @@ Preskool | Signin Page
                         <p class="account-subtitle">Need an account? <a href="{% url 'signupPage' %}">Sign Up</a></p>
                         <h2>Sign in</h2>
 
-                        
+
+                        {% if messages %}
+                           {% for message in messages %}
+                            {% if message.tags %}  <script>alert("{{ message }}")</script> {% endif %}
+                           {% endfor %}                   
+                        {% endif %}
+
+                        {% comment %} {% for message in messages %}
+                           <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                 <span aria-hidden="true">&times;</span>
+                              </button>
+                              {{ message }}
+                           </div>
+                        {% endfor %} {% endcomment %}
 
                         <form action="{% url 'signinPage' %}" method="POST">
                            {% csrf_token %}

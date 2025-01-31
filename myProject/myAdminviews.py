@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth.decorators import login_required
-
-
+from myApp.models import *
+from django.contrib import messages
 
 
 @login_required
@@ -55,7 +55,10 @@ def studentview(request):
  
 @login_required
 def studentadd(request):
-    context = {}
+    department = addDepartment.objects.all()
+    context = {
+        'department': department
+    }
     return render(request,'Student/studentadd.html',context)
  
 @login_required
@@ -70,10 +73,29 @@ def departmentlist(request):
     return render(request,'Department/departmentlist.html',context)
  
  
+ 
+ 
 @login_required
-def departmentadd(request):
-    context = {}
+def departmentadd(request):     
+    if request.method == "POST":
+        department_name = request.POST.get('department_name')
+        department_head_name = request.POST.get('department_head_name')
+        
+        if addDepartment.objects.filter(department_name=department_name).exists():
+            messages.warning(request,"Department already Exist !")
+            
+        else:
+            department =addDepartment(department_name=department_name,department_head_name=department_head_name)
+            department.save()
+            messages.success(request,"Department add Successfully ! !")
+            return redirect("departmentlist")
+        
+    context = {
+      
+    }
     return render(request,'Department/departmentadd.html',context)
+ 
+ 
  
 @login_required
 def departmentview(request):
